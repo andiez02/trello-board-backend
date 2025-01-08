@@ -3,17 +3,14 @@ import { StatusCodes } from "http-status-codes";
 
 const createNew = async (req, res, next) => {
   const correctCondition = Joi.object({
-    title: Joi.string().required().min(3).max(50).trim().strict(),
+    title: Joi.string().required().min(3).max(50).trim().strict().messages({}),
     description: Joi.string().required().min(3).max(256).trim().strict(),
   });
   try {
-    console.log(req.body);
     //abortEarly: false ==> có nhiều lỗi validation
     await correctCondition.validateAsync(req.body, { abortEarly: false });
-    // next();
-    res
-      .status(StatusCodes.CREATED)
-      .json({ message: "POS form Validation: API create list board" });
+    //Validate dữ liệu xong ==> request đi tiếp sang Controller
+    next();
   } catch (error) {
     console.log(error);
     console.log(Error(error));
