@@ -1,4 +1,5 @@
 import { StatusCodes } from "http-status-codes";
+import ApiError from "~/utils/ApiError";
 
 const createNew = async (req, res, next) => {
   try {
@@ -10,15 +11,13 @@ const createNew = async (req, res, next) => {
     console.log("🚀 ~ createNew ~ req.jwtDecoded:", req.jwtDecoded);
     //Điều hướng dữ liệu sang tầng Service
 
+    throw new ApiError(StatusCodes.BAD_GATEWAY, "Error tesst");
     //Có kết quả =>> trả về Client
-
-    res
-      .status(StatusCodes.CREATED)
-      .json({ message: "POS form Controller: API create list board" });
+    // res
+    //   .status(StatusCodes.CREATED)
+    //   .json({ message: "POS form Controller: API create list board" });
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors: error.message,
-    });
+    next(error);
   }
 };
 
