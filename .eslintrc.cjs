@@ -1,40 +1,42 @@
-/**
- * Updated by trungquandev.com's author on August 17 2023
- * YouTube: https://youtube.com/@trungquandev
- * "A bit of fragrance clings to the hand that gives flowers!"
- * Sample Eslint config for NodeJS ExpressJS MongoDB project
- */
 module.exports = {
-  env: { es2020: true, node: true },
-  extends: ["eslint:recommended"],
-  parser: "@babel/eslint-parser",
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    requireConfigFile: false,
-    allowImportExportEverywhere: true,
+  env: {
+    browser: true,
+    es2021: true,
+    jest: true,
   },
-  plugins: [],
+  extends: ["airbnb-base", "prettier"],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaVersion: 12,
+    sourceType: "module",
+  },
+  plugins: ["@typescript-eslint", "prettier"],
   rules: {
-    // // Common
-    // 'no-console': 1,
-    // 'no-extra-boolean-cast': 0,
-    // 'no-lonely-if': 1,
-    // 'no-unused-vars': 1,
-    // 'no-trailing-spaces': 1,
-    // 'no-multi-spaces': 1,
-    // 'no-multiple-empty-lines': 1,
-    // 'space-before-blocks': ['error', 'always'],
-    // 'object-curly-spacing': [1, 'always'],
-    // 'indent': ['warn', 2],
-    // 'semi': [1, 'never'],
-    // 'quotes': ['error', 'single'],
-    // 'array-bracket-spacing': 1,
-    // 'linebreak-style': 0,
-    // 'no-unexpected-multiline': 'warn',
-    // 'keyword-spacing': 1,
-    // 'comma-dangle': 1,
-    // 'comma-spacing': 1,
-    // 'arrow-spacing': 1
+    "prettier/prettier": ["error", { usePrettierrc: true }],
+    "lines-between-class-members": [
+      "error",
+      "always",
+      { exceptAfterSingleLine: true },
+    ],
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "no-param-reassign": "off",
+    "no-shadow": "off",
+    "class-methods-use-this": "off",
+    "no-unused-vars": "off",
+    "import/prefer-default-export": "off",
+    "import/no-import-module-exports": "off",
+    "default-param-last": "off",
+    radix: "off",
+    "consistent-return": "off",
+    "no-restricted-syntax": "off",
+    "dot-notation": "off",
+    "no-unused-expressions": "off",
+    "no-useless-constructor": "off",
+    "no-empty-function": "off",
+    "no-await-in-loop": "off",
+    "no-undef": "off",
+    "no-nested-ternary": "off",
+    "no-use-before-define": "off",
   },
 };
