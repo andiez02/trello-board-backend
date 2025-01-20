@@ -67,9 +67,9 @@ const pushCardOrderIds = async (card) => {
         //update
         { $push: { cardOrderIds: new ObjectId(card._id) } },
         //options
-        { ReturnDocument: "after" }
+        { returnDocument: "after" }
       );
-    return result.value;
+    return result;
   } catch (error) {
     throw new Error(error);
   }

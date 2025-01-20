@@ -23,6 +23,29 @@ const createNew = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  //not use require() in update case
+  const correctCondition = Joi.object({
+    title: Joi.string().min(3).max(50).trim().strict(),
+    description: Joi.string().min(3).max(256).trim().strict(),
+    type: Joi.string().valid(...Object.values(BOARD_TYPES)),
+  });
+  try {
+    //abortEarly: false ==> có nhiều lỗi validation
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+    //Validate dữ liệu xong ==> request đi tiếp sang Controller
+    next();
+  } catch (error) {
+    next(
+      new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message)
+    );
+  }
+};
+
 export const boardValidation = {
   createNew,
+  update,
 };

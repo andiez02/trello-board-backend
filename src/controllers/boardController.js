@@ -33,7 +33,21 @@ const getDetails = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  console.log("🚀 ~ update ~ req:", req);
+  try {
+    const boardId = req.params.id;
+    const updatedBoard = await boardService.update(boardId, req.body);
+
+    //Có kết quả =>> trả về Client
+    res.status(StatusCodes.OK).json(updatedBoard);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const boardController = {
   createNew,
   getDetails,
+  update,
 };
