@@ -21,6 +21,33 @@ const createNew = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  //not use require() in update case
+  const correctCondition = Joi.object({
+    // boardId: Joi.string()
+    //   .pattern(OBJECT_ID_RULE)
+    //   .message(OBJECT_ID_RULE_MESSAGE),
+    title: Joi.string().min(3).max(50).trim().strict(),
+    cardOrderIds: Joi.array().items(
+      Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+    ),
+  });
+  try {
+    //abortEarly: false ==> có nhiều lỗi validation
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+    //Validate dữ liệu xong ==> request đi tiếp sang Controller
+    next();
+  } catch (error) {
+    next(
+      new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message)
+    );
+  }
+};
+
 export const columnValidation = {
   createNew,
+  update,
 };
