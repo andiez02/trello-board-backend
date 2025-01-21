@@ -3,6 +3,8 @@ import { boardModel } from "~/models/boardModel";
 import ApiError from "~/utils/ApiError";
 import { StatusCodes } from "http-status-codes";
 import { cloneDeep } from "lodash";
+import { columnModel } from "~/models/columnModel";
+import { cardModel } from "~/models/cardModel";
 
 const createNew = async (reqBody) => {
   // eslint-disable-next-line no-useless-catch
@@ -73,8 +75,34 @@ const update = async (boardId, reqBody) => {
   }
 };
 
+const moveCardToDifferentColumn = async (reqBody) => {
+  try {
+    //* 1. Cập nhật cardOrderIds của Column ban đầu
+    await columnModel.update(reqBody.prevColumnId, {
+      cardOrderIds: reqBody.prevCardOrderIds,
+      updatedAt: Date.now(),
+    });
+
+    //* 2. Cập nhật cardOrderIds của Column tiếp theo
+    await columnModel.update(reqBody.nextColumnId, {
+      cardOrderIds: reqBody.nextCardOrderIds,
+      updatedAt: Date.now(),
+    });
+
+    //* 3. Cập nhật columnId mới của Card đã kéo
+    await cardModel.update(reqBody.currentCardId, {
+      columnId: reqBody.nextColumnId,
+    });
+
+    return { updateResult: "Success" };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const boardService = {
   createNew,
   getDetails,
   update,
+  moveCardToDifferentColumn,
 };
