@@ -137,12 +137,14 @@ const login = async (reqBody) => {
     const accessToken = await JwtProvider.generateToken(
       userInfo,
       env.ACCESS_TOKEN_SECRET_SIGNATURE,
+      // 5
       env.ACCESS_TOKEN_LIFE
     );
 
     const refreshToken = await JwtProvider.generateToken(
       userInfo,
       env.REFRESH_TOKEN_SECRET_SIGNATURE,
+      // 15
       env.REFRESH_TOKEN_LIFE
     );
 
@@ -153,8 +155,42 @@ const login = async (reqBody) => {
   }
 };
 
+const refreshToken = async (clientRefreshToken) => {
+  console.log("🚀 ~ refreshToken ~ clientRefreshToken:", clientRefreshToken);
+  try {
+    //Verify / giải mã token xem có hợp lý không
+    const refreshTokenDecoded = await JwtProvider.verifyToken(
+      clientRefreshToken,
+      env.REFRESH_TOKEN_SECRET_SIGNATURE
+    );
+    console.log(
+      "🚀 ~ refreshToken ~ refreshTokenDecoded:",
+      refreshTokenDecoded
+    );
+
+    const userInfo = {
+      _id: refreshTokenDecoded._id,
+      email: refreshTokenDecoded.email,
+    };
+
+    // Tạo accessToken mới
+    const accessToken = await JwtProvider.generateToken(
+      userInfo,
+      env.ACCESS_TOKEN_SECRET_SIGNATURE,
+      // 5 //5 giây test accessToken hết hạn
+      env.ACCESS_TOKEN_LIFE // 1 hour
+    );
+    console.log("🚀 ~ refreshToken ~ accessToken:", accessToken);
+
+    return { accessToken };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const userService = {
   createNew,
   verifyAccount,
   login,
+  refreshToken,
 };
